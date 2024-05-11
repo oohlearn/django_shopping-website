@@ -1,0 +1,53 @@
+{% extends "shop/base.html" %} {% block title %} Products {% endblock %} {% block content %}
+<h1>Hello</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-sm">
+        <form action="" method="get" class="card-body row no-gutters align-items-center">
+          <div class="col">
+            <input class="form-control form-control-borderless" placeholder="Search for products" type="search" name="product_name" />
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">search</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    {% for product in products %}
+
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-img-top">
+          <img src="{{product.image}}" alt="" height="200" width="200" />
+        </div>
+        <div class="card-body">
+          <div class="card-title">{{product.name}}</div>
+          <div class="card-text">${{product.price}}</div>
+
+          <button class="btn btn-warning">View</button>
+          <button class="btn btn-warning">Add to cart</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div>
+  {% if page_obj.has_previous %}
+  <a href="?page=1">First</a>
+  <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+  {% endif %}
+  <!-- 當前頁數就用page_number；總頁數是num_pages -->
+  Page: {{ page_obj.number }} of {{ paginator.num_pages }}
+
+  <!--  -->
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}">next</a>
+  <a href="?page={{ paginator.num_pages}}">Last</a>
+  {% endif %}
+</div>
+{% endblock %}

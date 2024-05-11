@@ -1,0 +1,12 @@
+h1 {
+  color: aqua;
+}
+
+.card-text {
+  color: green;
+  font-weight: 800;
+}
+
+.card-title {
+  font-weight: 900;
+}
