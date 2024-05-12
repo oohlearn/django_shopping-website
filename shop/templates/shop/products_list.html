@@ -27,27 +27,37 @@
           <div class="card-title">{{product.name}}</div>
           <div class="card-text">${{product.price}}</div>
 
-          <button class="btn btn-warning">View</button>
-          <button class="btn btn-warning">Add to cart</button>
+          <a href="/{{product.id }}" class="btn btn-warning"> View</a>
+
+          <button class="btn btn-warning atc">Add to cart</button>
         </div>
       </div>
     </div>
     {% endfor %}
   </div>
+  <br />
+  <div class="row">
+    <div class="col-md-3 offset-md-4">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item active">
+          <a class="page-link" href="?page=1">First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}">previous</a>
+        </li>
+        {% endif %} {% if page_obj.has_next %}
+
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+        </li>
+        <li class="page-item active">
+          <a class="page-link" href="?page={{ paginator.num_pages}}">Last</a>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+  </div>
 </div>
 
-<div>
-  {% if page_obj.has_previous %}
-  <a href="?page=1">First</a>
-  <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-  {% endif %}
-  <!-- 當前頁數就用page_number；總頁數是num_pages -->
-  Page: {{ page_obj.number }} of {{ paginator.num_pages }}
-
-  <!--  -->
-  {% if page_obj.has_next %}
-  <a href="?page={{ page_obj.next_page_number }}">next</a>
-  <a href="?page={{ paginator.num_pages}}">Last</a>
-  {% endif %}
-</div>
 {% endblock %}

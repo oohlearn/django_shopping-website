@@ -9,3 +9,6 @@ class Product(models.Model):
     category = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     image = models.CharField(max_length=300)
+    
+    def __str__(self):
+        return self.name
