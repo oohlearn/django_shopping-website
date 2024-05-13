@@ -1,5 +1,4 @@
 {% extends "shop/base.html" %} {% block title %} Products {% endblock %} {% block content %}
-<h1>Hello</h1>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -24,12 +23,12 @@
           <img src="{{product.image}}" alt="" height="200" width="200" />
         </div>
         <div class="card-body">
-          <div class="card-title">{{product.name}}</div>
+          <div id="nm{{product.id}}" class="card-title">{{product.name}}</div>
           <div class="card-text">${{product.price}}</div>
 
           <a href="/{{product.id }}" class="btn btn-warning"> View</a>
 
-          <button class="btn btn-warning atc">Add to cart</button>
+          <button id="{{product.id}}" class="btn btn-warning atc">Add to cart</button>
         </div>
       </div>
     </div>
