@@ -1,0 +1,52 @@
+{% extends "shop/base.html" %} {% block title %} Checkout {% endblock %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <ul class="list-group" id="item_list"></ul>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-12">
+      <form class="row g-3" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="items" name="items" />
+        <!-- 隱藏的欄位，使用者並不能填寫，會自動帶入資料 -->
+        <div class="col-md-6">
+          <label for="inputEmail4" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="John" />
+        </div>
+        <div class="col-md-6">
+          <label for="inputPassword4" class="form-label">Email</label>
+          <input type="text" class="form-control" id="email" name="email" placeholder="john@john.com" />
+        </div>
+        <div class="col-12">
+          <label for="inputAddress" class="form-label">Address</label>
+          <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" />
+        </div>
+        <div class="col-md-6">
+          <label for="inputCity" class="form-label">City</label>
+          <input type="text" class="form-control" id="city" name="city" />
+        </div>
+        <div class="col-md-4">
+          <label for="inputState" class="form-label">State</label>
+          <input type="text" class="form-control" id="state" name="state" />
+        </div>
+        <div class="col-md-2">
+          <label for="inputZip" class="form-label">Zip</label>
+          <input type="text" class="form-control" id="zipcode" name="zipcode" />
+        </div>
+        <div class="col-md-2">
+          <label for="inputZip" class="form-label">Amount to be paid</label>
+          <input readonly="" type="text" class="form-control" id="total" name="total" />
+        </div>
+
+        <div class="col-12">
+          <a href="{% url 'success' %}" type="submit" class="btn btn-primary">Place Order</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -25,7 +25,7 @@
                 <div class="navbar-nav">
                   <a class="nav-link active" aria-current="page" href="{% url 'products_list' %}">Home</a>
                   <a class="nav-link" href="#">Features</a>
-                  <button id="cart" type="button" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="<h5>This is your content</h5>" data-bs-html="true">Cart (0)</button>
+                  <a tabindex="0" id="cart" type="button" data-bs-trigger="focus" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="<h5>This is your content</h5>" data-bs-html="true">Cart (0)</a>
 
                   <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </div>
@@ -41,43 +41,80 @@
 
   <script type="text/javascript">
     console.log("This is work");
+
+    // 將local storage存到local 變數
     if (localStorage.getItem("cart") == null) {
       var cart = {};
-      // 儲存成一個json
     } else {
       cart = JSON.parse(localStorage.getItem("cart"));
     }
+    // 儲存成一個json
+
     // Jquery 偵測在class atc有沒有被點擊
     $(document).on("click", ".atc", function () {
       var item_id = this.id.toString();
       if (cart[item_id] != undefined) {
-        cart[item_id] += 1;
+        quantity = cart[item_id][0] + 1;
+        cart[item_id][0] = quantity;
+        cart[item_id][2] += parseFloat(document.getElementById("price" + item_id).innerHTML);
       } else {
-        cart[item_id] = 1;
+        quantity = 1;
+        price = parseFloat(document.getElementById("price" + item_id).innerHTML);
+        name = document.getElementById("nm" + item_id).innerHTML;
+        cart[item_id] = [quantity, name, price];
       }
       localStorage.setItem("cart", JSON.stringify(cart));
       document.getElementById("cart").innerHTML = "Cart (" + Object.keys(cart).length + ")";
+      console.log("cart");
+      console.log(typeof cart);
     });
     const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
     const popoverList = [...popoverTriggerList].map((popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl));
     DisplayCart(cart);
+
     function DisplayCart(cart) {
+      let cartObj = JSON.parse(localStorage.getItem("cart"));
+
       var cartString = "";
       var cartIndex = 1;
-      for (var c in cart) {
-        cartString += cartIndex;
-        const product_name = document.getElementById("nm" + c)?.innerHTML || "Unknown Product";
-        cartString += product_name + "Qty:" + cart[c];
+      for (c in cartObj) {
+        cartString += cartIndex + ". ";
+        const product_name = cartObj[c][1];
+        cartString += product_name + "Qty:" + cartObj[c][0] + "<br/>";
         cartIndex += 1;
       }
-      const popoverTriggerEl = document.querySelector('[data-bs-toggle="popover"]');
-      const popover = new bootstrap.Popover(popoverTriggerEl);
+      cartString += "<a href='/checkout' class='btn btn-warning' id='checkout'>Checkout</a>";
+      var popover = new bootstrap.Popover(document.getElementById("cart"), {
+        content: cartString,
+        trigger: "focus",
+      });
 
       // setContent example
       popover.setContent({
-        ".popover-header": "<h5>This is my cart</h5>",
+        ".popover-header": "<h5>This is your cart</h5>",
         ".popover-body": cartString,
       });
     }
+
+    // checkout page
+    let total = 0;
+    for (item in cart) {
+      let name = cart[item][1];
+      let quantity = cart[item][0];
+      let price = cart[item][2];
+      total += price;
+      itemString = `<li class="list-group-item d-flex justify-content-between align-items-center">
+          ${name}
+          <span >${quantity}</span>
+          <span class="badge bg-warning badge-pill">$ ${price}</span>
+        </li>`;
+      $("#item_list").append(itemString);
+    }
+    totalString = `<li class="list-group-item d-flex justify-content-between align-items-center"><b>Your total</b>$ ${total}</li>`;
+    $("#item_list").append(totalString);
+
+    $("#items").val(JSON.stringify(cart));
+    $("#total").val(JSON.stringify(total));
+    // 將cart的資料轉換成JSON，並且代入#item的value
   </script>
 </html>
